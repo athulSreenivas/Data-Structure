@@ -1,4 +1,4 @@
-	
+
 #include<stdio.h>
 #include<stdlib.h>
 
@@ -239,4 +239,31 @@ void display(){
 		temp=temp->next;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
