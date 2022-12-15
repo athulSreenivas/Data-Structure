@@ -61,11 +61,10 @@ void enqueue(struct queue* q,int v){
 	
 	if(q->f==-1)
 		q->f=0;
-	else{
+
 		q->r++;
 		q->val[q->r]=v;
-		
-	}
+	
 	
 }
 
@@ -74,7 +73,20 @@ int dequeue(struct queue* q){
 	int v;
 	v=q->val[q->f];
 	q->f++;
+	 if (q->f > q->r) {
+      q->f = q->r = -1;
+    }
 	return v;
+}
+
+int isEmpty(struct queue* q) {
+
+	
+
+  if (q->r == -1)
+    return 1;
+  else
+    return 0;
 }
 
 
@@ -85,16 +97,15 @@ void bfs(struct Graph* g,int start){
 	q->r=-1;
 	
 	g->visited[start]=1;
+	
 	enqueue(q,start);
 	
 	printf("%d",start);
 	
-	printf("%d",q->r);
+
 	
+	while(!isEmpty(q)){
 	
-	
-	while(q->r!=-1){
-		
 		int sel=dequeue(q);
 		
 		printf("%d\t",sel);
@@ -108,8 +119,9 @@ void bfs(struct Graph* g,int start){
 				g->visited[sel]=1;
 				
 				enqueue(q,sel);	
+			}else{
+			snode=snode->next;
 			}
-			snode=snode->next;			
 		}
 	
 	}
