@@ -1,153 +1,178 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
+int noofvertex=5;
 
-struct node{
-		int vertex;
-		struct node* next;
+struct node
+{
+	int vertex;
+	struct node *next;
 };
 
-struct Graph{
-
+struct Graph
+{
 	int no_vertex;
-	int* visited;
-	struct node** adj;
-	 	
+	int *visited;
+	struct node **adj;
 };
 
-
-struct queue{
+struct queue
+{
 	int r;
 	int f;
 	int val[5];
 };
 
-struct Graph* creategraph(int v){
+struct Graph *creategraph(int v)
+{
 	int i;
-	struct Graph* g=malloc(sizeof(struct Graph));
-	g->	no_vertex=v;
-	g->visited=malloc(v*sizeof(int));
-	g->adj=malloc(v*sizeof(struct node));
-	
-	for (i=0;i<g->no_vertex;i++){
-		g->visited[i]=0;
-		g->adj[i]=NULL;
+	struct Graph *g = malloc(sizeof(struct Graph));
+	g->no_vertex = v;
+	g->visited = malloc(v * sizeof(int));
+	g->adj = malloc(v * sizeof(struct node *));
+
+	for (i = 0; i < (g->no_vertex); i++)
+	{
+		g->visited[i] = 0;
+		g->adj[i] = NULL;
 	}
-	return g;		
+	return g;
 }
 
-struct node* createnode(int v){
-	
-	struct node* Node=(struct node*)malloc(sizeof(struct node));
-	Node->vertex=v;
-	Node->next=NULL;
+struct node *createnode(int v)
+{
+
+	struct node *Node = (struct node *)malloc(sizeof(struct node));
+	Node->vertex = v;
+	Node->next = NULL;
 	return Node;
 }
 
+void readgraph(struct Graph *g)
+{
+	int i, ad, j, data;
+	for (i = 0; i < (g->no_vertex); i++)
+	{
+		struct node *temp = NULL;
+		printf("\n Enter the number of adjacent vertex %d", i);
+		scanf("%d", &ad);
 
-void addEdges(struct Graph* g,int s,int d){
-	
-	struct node* newnode=createnode(s);
-	newnode->next=g->adj[d];
-	g->adj[d]=newnode;
-	
-	newnode=createnode(d);
-	newnode->next=g->adj[s];
-	g->adj[s]=newnode;
+		for (j = 0; j < ad; j++)
+		{
+
+			printf("Enter the value of %d adjacent to %d ", j, i);
+			scanf("%d", &data);
+			struct node *newnode = createnode(data);
+
+			if (g->adj[i] == NULL)
+			{
+				g->adj[i] = newnode;
+			}
+			else
+			{
+				temp->next = newnode;
+			}
+			temp = newnode;
+		}
+	}
 }
 
+void printGraph(struct Graph *g)
+{
 
-void enqueue(struct queue* q,int v){
-	
-	if(q->f==-1)
-		q->f=0;
+	struct node *temp = NULL;
 
-		q->r++;
-		q->val[q->r]=v;
-	
-	
+	for (int i = 0; i < (g->no_vertex); i++)
+	{
+		printf("\nAdjacent of %d are", i);
+
+		temp = g->adj[i];
+
+		while (temp!=NULL)
+		{
+			printf("\t%d\t",temp->vertex);
+			temp=temp->next;
+		}
+	}
 }
 
-int dequeue(struct queue* q){
-	
+void enqueue(struct queue *q, int v)
+{
+
+	if (q->f == -1)
+		q->f = 0;
+
+	q->r++;
+	q->val[q->r] = v;
+}
+
+int dequeue(struct queue *q)
+{
 	int v;
-	v=q->val[q->f];
+	v = q->val[q->f];
 	q->f++;
-	 if (q->f > q->r) {
-      q->f = q->r = -1;
-    }
+	if (q->f > q->r)
+	{
+		q->f = q->r = -1;
+	}
 	return v;
 }
 
-int isEmpty(struct queue* q) {
+int isEmpty(struct queue *q)
+{
 
-	
-
-  if (q->r == -1)
-    return 1;
-  else
-    return 0;
+	if (q->r == -1)
+		return 1;
+	else
+		return 0;
 }
 
+void bfs(struct Graph *g, int start)
+{
 
-void bfs(struct Graph* g,int start){
-		
-	struct queue* q=malloc(sizeof(struct queue));
-	q->f=-1;
-	q->r=-1;
-	
-	g->visited[start]=1;
-	
-	enqueue(q,start);
-	
-	printf("%d",start);
-	
+	struct queue *q = malloc(sizeof(struct queue));
+	q->f = -1;
+	q->r = -1;
 
-	
-	while(!isEmpty(q)){
-	
-		int sel=dequeue(q);
-		
-		printf("%d\t",sel);
-		
-		struct node* snode=g->adj[sel];
-		
-		while(snode){
-			
-			if(g->visited[sel]==0){
-				
-				g->visited[sel]=1;
-				
-				enqueue(q,sel);	
-			}else{
-			snode=snode->next;
+	g->visited[start] = 1;
+
+	enqueue(q, start);
+
+	printf("\n BFS is");
+
+	while (!isEmpty(q))
+	{
+
+		int sel = dequeue(q);
+
+		printf("%d", sel);
+
+		struct node *snode = g->adj[sel];
+
+		while (snode!=NULL)
+		{
+
+			if (g->visited[snode->vertex] == 0)
+			{
+
+				g->visited[snode->vertex] = 1;
+
+				enqueue(q, snode->vertex);
 			}
-		}
-	
-	}
+			
+			snode = snode->next;
 		
+		}
+	}
 }
 
+void main()
+{
+	printf("\n Enter the number of vertices ");
+	scanf("%d",&noofvertex);
 
-
-
-
-void main(){
-		
-	
-	//printf("\nEnter the number of vetices");
-	//#scanf("%d",&novertices);
-	
-	struct Graph* g=creategraph(4);
-	
-	addEdges(g,0,1);
-	addEdges(g,0,2);
-	addEdges(g,0,3);
-	addEdges(g,3,0);
-	addEdges(g,1,0);
-	addEdges(g,1,2);
-	addEdges(g,2,4);
-	
-	bfs(g,0);
-		
+	struct Graph *g = creategraph(noofvertex);
+	readgraph(g);
+	printGraph(g);
+	bfs(g, 0);
 }
