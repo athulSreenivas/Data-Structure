@@ -84,7 +84,7 @@ void printGraph(struct Graph *g)
 
 	for (int i = 0; i < (g->no_vertex); i++)
 	{
-		printf("\nAdjacent of %d are", i);
+		printf("\nAdjacent of %d are\t", i);
 
 		temp = g->adj[i];
 
@@ -127,25 +127,19 @@ int isEmpty(struct queue *q)
 		return 0;
 }
 
-void bfs(struct Graph *g, int start)
+void bfs(struct Graph *g,struct queue *q, int start)
 {
-
-	struct queue *q = malloc(sizeof(struct queue));
-	q->f = -1;
-	q->r = -1;
 
 	g->visited[start] = 1;
 
 	enqueue(q, start);
-
-	printf("\n BFS is");
-
+		
 	while (!isEmpty(q))
 	{
 
 		int sel = dequeue(q);
 
-		printf("%d", sel);
+		printf("%d\t", sel);
 
 		struct node *snode = g->adj[sel];
 
@@ -168,10 +162,44 @@ void bfs(struct Graph *g, int start)
 
 void main()
 {
+	int stvertex,i=0;int choice;
 	printf("\n Enter the number of vertices ");
 	scanf("%d",&noofvertex);
 	struct Graph *g = creategraph(noofvertex);
 	readgraph(g);
 	printGraph(g);
-	bfs(g, 0);
+	
+	do{
+	
+	printf("\n Enter the starting vertex");
+	scanf("%d",&stvertex);
+	
+	struct queue *q = malloc(sizeof(struct queue));
+	q->f = -1;
+	q->r = -1;
+	
+	
+	for (i = 0; i < (g->no_vertex); i++)
+	{
+		g->visited[i] = 0;
+	}
+	
+	printf("\n***** BFS is *****\t");
+	
+	bfs(g,q,stvertex);
+	
+	for(int i=0;i<g->no_vertex;i++){
+		
+		if(g->visited[i]==0){
+			bfs(g,q,i);
+		}
+	}
+	
+	printf("\nEnter the below option\n\n1.Bfs\n2.Exit");
+	scanf("%d",&choice);
+	
+	
+	}while(choice!=2);
+	
+	
 }
