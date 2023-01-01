@@ -41,7 +41,7 @@ void main(){
 					display();
 					break;							
 						
-			case 5:
+			case 4:
 					printf("\n *********Exiting**********");
 					break;
 			default:

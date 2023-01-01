@@ -16,13 +16,6 @@ struct Graph
 	struct node **adj;
 };
 
-struct queue
-{
-	int r;
-	int f;
-	int val[5];
-};
-
 struct Graph *creategraph(int v)
 {
 	int i;
@@ -96,74 +89,20 @@ void printGraph(struct Graph *g)
 	}
 }
 
-void enqueue(struct queue *q, int v)
+void dfs(struct Graph *g,int start)
 {
+    g->visited[start]=1;
+    printf("%d->",start);
+    struct node*ptr=g->adj[start];
+    while(ptr!=NULL)
+    {
+        if(g->visited[ptr->vertex]==0)
+        {
+            dfs(g,ptr->vertex);
+        }
+        ptr=ptr->next;
+    }
 
-	if (q->f == -1)
-		q->f = 0;
-
-	q->r++;
-	q->val[q->r] = v;
-}
-
-int dequeue(struct queue *q)
-{
-	int v;
-	v = q->val[q->f];
-	q->f++;
-	if (q->f > q->r)
-	{
-		q->f = q->r = -1;
-	}
-	return v;
-}
-
-int isEmpty(struct queue *q)
-{
-
-	if (q->r == -1)
-		return 1;
-	else
-		return 0;
-}
-
-void bfs(struct Graph *g, int start)
-{
-
-	struct queue *q = malloc(sizeof(struct queue));
-	q->f = -1;
-	q->r = -1;
-
-	g->visited[start] = 1;
-
-	enqueue(q, start);
-
-	printf("\n BFS is");
-
-	while (!isEmpty(q))
-	{
-
-		int sel = dequeue(q);
-
-		printf("%d", sel);
-
-		struct node *snode = g->adj[sel];
-
-		while (snode!=NULL)
-		{
-
-			if (g->visited[snode->vertex] == 0)
-			{
-
-				g->visited[snode->vertex] = 1;
-
-				enqueue(q, snode->vertex);
-			}
-			
-			snode = snode->next;
-		
-		}
-	}
 }
 
 void main()
@@ -173,5 +112,5 @@ void main()
 	struct Graph *g = creategraph(noofvertex);
 	readgraph(g);
 	printGraph(g);
-	bfs(g, 0);
+	dfs(g, 0);
 }
