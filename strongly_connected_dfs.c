@@ -49,7 +49,6 @@ struct Graph *creategraph(int v)
 
 void addtranspose(struct Graph *g, int s, int d)
 {
-
     struct node *newnode = createnode(s);
     newnode->next = g->adj[d].head;
     g->adj[d].head = newnode;
@@ -57,7 +56,6 @@ void addtranspose(struct Graph *g, int s, int d)
 
 void add_edge(struct Graph *g, struct Graph *gt, int s, int d)
 {
-
     struct node *newnode = createnode(d);
     newnode->next = g->adj[s].head;
     g->adj[s].head = newnode;
@@ -111,7 +109,7 @@ void dfs(struct Graph *g, int start)
     stack[top] = start;
 }
 
-void topological_sort(struct Graph *g)
+void firstdfs(struct Graph *g)
 {
     for (int i = 0; i < g->no_vertex; i++)
     {
@@ -143,7 +141,6 @@ void strongly(struct Graph *g)
     {
         int s = stack[top];
         top--;
-
         if (g->visited[s] == 0)
         {
             printf("\n Component\t");
@@ -168,7 +165,7 @@ void main()
 
     printGraph(gr);
 
-    topological_sort(graph);
+    firstdfs(graph);
 
     printf("Strongly Connected Graph\n");
 
